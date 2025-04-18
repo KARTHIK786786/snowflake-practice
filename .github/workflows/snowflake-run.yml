@@ -10,17 +10,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout Code
+    - name: ✅ Checkout Code
       uses: actions/checkout@v3
 
-    - name: Install snowsql
+    - name: ✅ Install snowsql CLI
       run: |
         curl -O https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/1.2/linux_x86_64/snowsql-1.2.21-linux_x86_64.bash
-        bash snowsql-1.2.21-linux_x86_64.bash
+        bash snowsql-1.2.21-linux_x86_64.bash -- -y -d $HOME/snowsql
+        echo "$HOME/snowsql/bin" >> $GITHUB_PATH
 
-    - name: Run SQL Script
+    - name: ✅ Run SQL Script using snowsql
       run: |
-        ~/.snowsql/snowsql \
+        snowsql \
           -a ${{ secrets.SF_ACCOUNT }} \
           -u ${{ secrets.SF_USER }} \
           -p ${{ secrets.SF_PASSWORD }} \
