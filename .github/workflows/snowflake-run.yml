@@ -1,4 +1,4 @@
-name: Run Snowflake Script using pip SnowSQL
+name: Run Snowflake Script
 
 on:
   push:
