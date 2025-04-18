@@ -21,7 +21,7 @@ jobs:
     - name: Run SQL Script using inline Snowflake credentials
       run: |
         snow sql \
-          --account-name ${{ secrets.SF_ACCOUNT }} \
+          --account ${{ secrets.SF_ACCOUNT }} \
           --username ${{ secrets.SF_USER }} \
           --password ${{ secrets.SF_PASSWORD }} \
           --role ${{ secrets.SF_ROLE }} \
