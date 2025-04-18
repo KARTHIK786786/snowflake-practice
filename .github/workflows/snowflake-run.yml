@@ -20,12 +20,11 @@ jobs:
 
     - name: Run SQL Script using inline Snowflake credentials
       run: |
-        snow sql \
-          --account ${{ secrets.SF_ACCOUNT }} \
-          --username ${{ secrets.SF_USER }} \
-          --password ${{ secrets.SF_PASSWORD }} \
-          --role ${{ secrets.SF_ROLE }} \
-          --warehouse ${{ secrets.SF_WAREHOUSE }} \
-          --database ${{ secrets.SF_DATABASE }} \
-          --schema ${{ secrets.SF_SCHEMA }} \
-          -f 02_insert_data/insert_customer.sql
+        snow sql --account ${{ secrets.SF_ACCOUNT }} \
+                 --username ${{ secrets.SF_USER }} \
+                 --password ${{ secrets.SF_PASSWORD }} \
+                 --role ${{ secrets.SF_ROLE }} \
+                 --warehouse ${{ secrets.SF_WAREHOUSE }} \
+                 --database ${{ secrets.SF_DATABASE }} \
+                 --schema ${{ secrets.SF_SCHEMA }} \
+                 -f 02_insert_data/insert_customer.sql
