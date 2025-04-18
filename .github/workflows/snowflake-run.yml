@@ -20,11 +20,11 @@ jobs:
       - name: ✅ Run SQL script using inline credentials
         run: |
           snow sql \
-            --account pipbfcf-xr87735 \
+            --accountname pipbfcf-xr87735 \
             --username mithrakarthik2025 \
             --password Mithrakarthik2025NEW \
-            --role ACCOUNTADMIN \
-            --warehouse COMPUTE_WH \
-            --database SNOWPARKDB \
-            --schema SNOWPARKSCHEMA \
+            --rolename ACCOUNTADMIN \
+            --warehousename COMPUTE_WH \
+            --dbname SNOWPARKDB \
+            --schemaname SNOWPARKSCHEMA \
             -f 02_insert_data/insert_customer.sql
