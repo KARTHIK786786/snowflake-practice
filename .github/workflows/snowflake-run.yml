@@ -13,22 +13,28 @@ jobs:
     - name: ✅ Checkout Code
       uses: actions/checkout@v3
 
-    - name: ✅ Install snowsql CLI from Snowflake CDN (ignore non-critical exit)
+    - name: ✅ Install snowsql CLI from Snowflake CDN
       run: |
+        mkdir -p $HOME/snowsql
         curl -O https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/1.2/linux_x86_64/snowsql-1.2.21-linux_x86_64.bash
-        bash snowsql-1.2.21-linux_x86_64.bash -- -y -d $HOME/snowsql || true
+        bash snowsql-1.2.21-linux_x86_64.bash -- -y -d $HOME/snowsql
         echo "$HOME/snowsql/bin" >> $GITHUB_PATH
+        chmod +x $HOME/snowsql/bin/snowsql
 
-    - name: ✅ Run SQL Script using snowsql
-      env:
-        SNOWSQL_ACCOUNT: ${{ secrets.SF_ACCOUNT }}
-        SNOWSQL_USER: ${{ secrets.SF_USER }}
-        SNOWSQL_PWD: ${{ secrets.SF_PASSWORD }}
-        SNOWSQL_ROLE: ${{ secrets.SF_ROLE }}
-        SNOWSQL_WAREHOUSE: ${{ secrets.SF_WAREHOUSE }}
-        SNOWSQL_DATABASE: ${{ secrets.SF_DATABASE }}
-        SNOWSQL_SCHEMA: ${{ secrets.SF_SCHEMA }}
+    - name: ✅ Verify snowsql is installed
       run: |
         echo "PATH = $PATH"
         which snowsql || true
-        snowsql -f 02_insert_data/insert_customer.sql
+        snowsql -v || echo "snowsql not available"
+
+    - name: ✅ Run SQL Script using inline credentials
+      run: |
+        snowsql \
+          -a pipbfcf-xr87735 \
+          -u mithrakarthik2025 \
+          -p Mithrakarthik2025NEW \
+          -r ACCOUNTADMIN \
+          -w COMPUTE_WH \
+          -d SNOWPARKDB \
+          -s SNOWPARKSCHEMA \
+          -f 02_insert_data/insert_customer.sql
