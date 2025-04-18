@@ -13,18 +13,20 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Install SnowSQL using Debian package
+    - name: Install SnowSQL from CDN
       run: |
-        wget https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/1.2/linux_x86_64/debian/snowflake-snowsql_1.2.21_amd64.deb
-        sudo apt-get install -y ./snowflake-snowsql_1.2.21_amd64.deb
+        curl -L 'https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/1.2/linux_x86_64/snowsql-linux_x86_64.tgz' -o snowsql.tgz
+        mkdir -p ~/snowsql
+        tar -xvzf snowsql.tgz -C ~/snowsql
+        ~/snowsql/snowsql-linux_x86_64/install --yes
 
     - name: Run insert_customer.sql in Snowflake
       run: |
-        snowsql -a ${{ secrets.SF_ACCOUNT }} \
-                -u ${{ secrets.SF_USER }} \
-                -p ${{ secrets.SF_PASSWORD }} \
-                -r ${{ secrets.SF_ROLE }} \
-                -w ${{ secrets.SF_WAREHOUSE }} \
-                -d ${{ secrets.SF_DATABASE }} \
-                -s ${{ secrets.SF_SCHEMA }} \
-                -f 02_insert_data/insert_customer.sql
+        ~/.snowsql/snowsql -a ${{ secrets.SF_ACCOUNT }} \
+                           -u ${{ secrets.SF_USER }} \
+                           -p ${{ secrets.SF_PASSWORD }} \
+                           -r ${{ secrets.SF_ROLE }} \
+                           -w ${{ secrets.SF_WAREHOUSE }} \
+                           -d ${{ secrets.SF_DATABASE }} \
+                           -s ${{ secrets.SF_SCHEMA }} \
+                           -f 02_insert_data/insert_customer.sql
