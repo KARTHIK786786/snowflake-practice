@@ -2,7 +2,7 @@ name: Run SQL with Snow CLI
 
 on:
   push:
-    branches: [main]
+    branches: [main]  # or update with your branch name
 
 jobs:
   run-snowflake:
@@ -17,10 +17,10 @@ jobs:
           pip install --upgrade pip
           pip install snowflake-cli-labs
 
-      - name: ✅ Run SQL script using inline connection
+      - name: ✅ Run SQL script using inline credentials
         run: |
           snow sql \
-            --account-name pipbfcf-xr87735 \
+            --account pipbfcf-xr87735 \
             --username mithrakarthik2025 \
             --password Mithrakarthik2025NEW \
             --role ACCOUNTADMIN \
