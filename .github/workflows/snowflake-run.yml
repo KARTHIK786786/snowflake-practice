@@ -20,14 +20,14 @@ jobs:
 
     - name: Configure Snowflake Connection
       run: |
-        snow connection add default \
-          --account-name ${{ secrets.SF_ACCOUNT }} \
+        snow connection add --connection-name default \
+          --account ${{ secrets.SF_ACCOUNT }} \
           --username ${{ secrets.SF_USER }} \
           --password ${{ secrets.SF_PASSWORD }} \
-          --role-name ${{ secrets.SF_ROLE }} \
-          --warehouse-name ${{ secrets.SF_WAREHOUSE }} \
-          --database-name ${{ secrets.SF_DATABASE }} \
-          --schema-name ${{ secrets.SF_SCHEMA }}
+          --role ${{ secrets.SF_ROLE }} \
+          --warehouse ${{ secrets.SF_WAREHOUSE }} \
+          --database ${{ secrets.SF_DATABASE }} \
+          --schema ${{ secrets.SF_SCHEMA }}
 
     - name: Run SQL Script in Snowflake
       run: |
