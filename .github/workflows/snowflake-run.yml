@@ -29,4 +29,6 @@ jobs:
         SNOWSQL_DATABASE: ${{ secrets.SF_DATABASE }}
         SNOWSQL_SCHEMA: ${{ secrets.SF_SCHEMA }}
       run: |
+        echo "PATH = $PATH"
+        which snowsql || true
         snowsql -f 02_insert_data/insert_customer.sql
