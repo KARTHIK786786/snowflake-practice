@@ -13,15 +13,15 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Install Snowflake CLI
+    - name: Install Snowflake CLI (snowflake-cli-labs)
       run: |
-        pip install --upgrade pip
+        python3 -m pip install --upgrade pip
         pip install snowflake-cli-labs
 
     - name: Configure Snowflake Connection
       run: |
         snow connection add --connection-name default \
-          --accountname ${{ secrets.SF_ACCOUNT }} \
+          --account ${{ secrets.SF_ACCOUNT }} \
           --username ${{ secrets.SF_USER }} \
           --password ${{ secrets.SF_PASSWORD }} \
           --role ${{ secrets.SF_ROLE }} \
