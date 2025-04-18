@@ -1,24 +1,15 @@
-name: Run Snowflake SQL via Snow CLI
+name: Run SQL with Snow CLI
 
 on:
   push:
     branches: [main]
 
 jobs:
-  run-snowflake:
+  snowflake-run:
     runs-on: ubuntu-latest
 
-    env:
-      SNOWFLAKE_ACCOUNT: pipbfcf-xr87735
-      SNOWFLAKE_USER: mithrakarthik2025
-      SNOWFLAKE_PASSWORD: Mithrakarthik2025NEW
-      SNOWFLAKE_ROLE: ACCOUNTADMIN
-      SNOWFLAKE_WAREHOUSE: COMPUTE_WH
-      SNOWFLAKE_DATABASE: SNOWPARKDB
-      SNOWFLAKE_SCHEMA: SNOWPARKSCHEMA
-
     steps:
-      - name: ✅ Checkout Code
+      - name: ✅ Checkout Repository
         uses: actions/checkout@v3
 
       - name: ✅ Install Snow CLI
@@ -26,6 +17,16 @@ jobs:
           pip install --upgrade pip
           pip install snowflake-cli-labs
 
-      - name: ✅ Run SQL Script using Snow CLI
+      - name: ✅ Run SQL Script using inline connection
         run: |
-          snow sql -f 02_insert_data/insert_customer.sql
+          snow config init
+          snow connection add devconn \
+            --account-name pipbfcf-xr87735 \
+            --username mithrakarthik2025 \
+            --password Mithrakarthik2025NEW \
+            --role ACCOUNTADMIN \
+            --warehouse COMPUTE_WH \
+            --database SNOWPARKDB \
+            --schema SNOWPARKSCHEMA
+          
+          snow sql -c devconn -f 02_insert_data/insert_customer.sql
