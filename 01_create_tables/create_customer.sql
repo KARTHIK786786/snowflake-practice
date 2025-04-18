@@ -1,0 +1,6 @@
+-- create_customer.sql
+CREATE OR REPLACE TABLE CUSTOMER (
+  ID INT,
+  NAME STRING,
+  AGE INT
+);
