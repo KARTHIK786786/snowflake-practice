@@ -13,21 +13,20 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Install SnowSQL using ZIP
+    - name: Install SnowSQL using pip
       run: |
-        sudo apt update
-        sudo apt install -y unzip
-        curl -O https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/1.2/linux_x86_64/snowsql-linux_x86_64.zip
-        unzip snowsql-linux_x86_64.zip
-        ./snowsql-linux_x86_64/install.sh
+        python3 -m pip install --upgrade pip
+        pip install snowflake-cli-labs
 
     - name: Run insert_customer.sql in Snowflake
       run: |
-        ~/.snowsql/snowsql -a ${{ secrets.SF_ACCOUNT }} \
-                           -u ${{ secrets.SF_USER }} \
-                           -p ${{ secrets.SF_PASSWORD }} \
-                           -r ${{ secrets.SF_ROLE }} \
-                           -w ${{ secrets.SF_WAREHOUSE }} \
-                           -d ${{ secrets.SF_DATABASE }} \
-                           -s ${{ secrets.SF_SCHEMA }} \
-                           -f 02_insert_data/insert_customer.sql
+        sfcli login connection save myconn \
+          --account ${{ secrets.SF_ACCOUNT }} \
+          --username ${{ secrets.SF_USER }} \
+          --password ${{ secrets.SF_PASSWORD }} \
+          --role ${{ secrets.SF_ROLE }} \
+          --warehouse ${{ secrets.SF_WAREHOUSE }} \
+          --database ${{ secrets.SF_DATABASE }} \
+          --schema ${{ secrets.SF_SCHEMA }}
+
+        sfcli execute file -f 02_insert_data/insert_customer.sql --connection myconn
