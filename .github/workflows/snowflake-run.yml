@@ -1,4 +1,4 @@
-name: Run Snowflake Script
+name: Run Snowflake Script with snowsql
 
 on:
   push:
@@ -6,25 +6,26 @@ on:
       - main
 
 jobs:
-  run-snowflake:
+  run-snowsql:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
+    - name: Checkout Code
       uses: actions/checkout@v3
 
-    - name: Install Snowflake CLI
+    - name: Install snowsql
       run: |
-        pip install --upgrade pip
-        pip install snowflake-cli-labs
+        curl -O https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/1.2/linux_x86_64/snowsql-1.2.21-linux_x86_64.bash
+        bash snowsql-1.2.21-linux_x86_64.bash
 
-    - name: Run SQL Script using inline Snowflake credentials
+    - name: Run SQL Script
       run: |
-        snow sql --account ${{ secrets.SF_ACCOUNT }} \
-                 --username ${{ secrets.SF_USER }} \
-                 --password ${{ secrets.SF_PASSWORD }} \
-                 --role ${{ secrets.SF_ROLE }} \
-                 --warehouse ${{ secrets.SF_WAREHOUSE }} \
-                 --database ${{ secrets.SF_DATABASE }} \
-                 --schema ${{ secrets.SF_SCHEMA }} \
-                 -f 02_insert_data/insert_customer.sql
+        ~/.snowsql/snowsql \
+          -a ${{ secrets.SF_ACCOUNT }} \
+          -u ${{ secrets.SF_USER }} \
+          -p ${{ secrets.SF_PASSWORD }} \
+          -r ${{ secrets.SF_ROLE }} \
+          -w ${{ secrets.SF_WAREHOUSE }} \
+          -d ${{ secrets.SF_DATABASE }} \
+          -s ${{ secrets.SF_SCHEMA }} \
+          -f 02_insert_data/insert_customer.sql
