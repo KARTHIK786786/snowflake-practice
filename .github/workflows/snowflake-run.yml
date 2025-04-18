@@ -29,4 +29,4 @@ jobs:
 
     - name: Run SQL Script in Snowflake
       run: |
-        snow sql -f 02_insert_data/insert_customer.sql
+        snow sql -f 02_insert_data/insert_customer.sql --connection '@env'
