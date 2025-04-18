@@ -9,6 +9,15 @@ jobs:
   run-snowsql:
     runs-on: ubuntu-latest
 
+    env:
+      SNOWFLAKE_ACCOUNT: pipbfcf-xr87735
+      SNOWFLAKE_USER: mithrakarthik2025
+      SNOWFLAKE_PASSWORD: Mithrakarthik2025NEW
+      SNOWFLAKE_ROLE: ACCOUNTADMIN
+      SNOWFLAKE_WAREHOUSE: COMPUTE_WH
+      SNOWFLAKE_DATABASE: SNOWPARKDB
+      SNOWFLAKE_SCHEMA: SNOWPARKSCHEMA
+
     steps:
     - name: ✅ Checkout Code
       uses: actions/checkout@v3
@@ -18,17 +27,6 @@ jobs:
         python3 -m pip install --upgrade pip
         pip install snowflake-cli-labs
 
-    - name: ✅ Configure Snowflake Connection
-      run: |
-        snow connection add --connection-name devconn \
-          --account pipbfcf-xr87735 \
-          --user mithrakarthik2025 \
-          --password Mithrakarthik2025NEW \
-          --role ACCOUNTADMIN \
-          --warehouse COMPUTE_WH \
-          --database SNOWPARKDB \
-          --schema SNOWPARKSCHEMA
-
     - name: ✅ Run SQL Script
       run: |
-        snow sql -f 02_insert_data/insert_customer.sql --connection devconn
+        snow sql -f 02_insert_data/insert_customer.sql
