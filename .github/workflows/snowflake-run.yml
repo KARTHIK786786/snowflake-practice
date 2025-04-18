@@ -1,4 +1,4 @@
-name: Run Snowflake Script using snowsql
+name: Run Snowflake Script using pip SnowSQL
 
 on:
   push:
@@ -13,28 +13,22 @@ jobs:
     - name: ✅ Checkout Code
       uses: actions/checkout@v3
 
-    - name: ✅ Install snowsql CLI from Snowflake CDN
+    - name: ✅ Install SnowSQL CLI via pip
       run: |
-        mkdir -p $HOME/snowsql
-        curl -O https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/1.2/linux_x86_64/snowsql-1.2.21-linux_x86_64.bash
-        bash snowsql-1.2.21-linux_x86_64.bash -- -y -d $HOME/snowsql
-        echo "$HOME/snowsql/bin" >> $GITHUB_PATH
-        chmod +x $HOME/snowsql/bin/snowsql
+        python3 -m pip install --upgrade pip
+        pip install snowflake-cli-labs
 
-    - name: ✅ Verify snowsql is installed
+    - name: ✅ Configure Snowflake Connection
       run: |
-        echo "PATH = $PATH"
-        which snowsql || true
-        snowsql -v || echo "snowsql not available"
+        snow connection add --connection-name devconn \
+          --account pipbfcf-xr87735 \
+          --user mithrakarthik2025 \
+          --password Mithrakarthik2025NEW \
+          --role ACCOUNTADMIN \
+          --warehouse COMPUTE_WH \
+          --database SNOWPARKDB \
+          --schema SNOWPARKSCHEMA
 
-    - name: ✅ Run SQL Script using inline credentials
+    - name: ✅ Run SQL Script
       run: |
-        snowsql \
-          -a pipbfcf-xr87735 \
-          -u mithrakarthik2025 \
-          -p Mithrakarthik2025NEW \
-          -r ACCOUNTADMIN \
-          -w COMPUTE_WH \
-          -d SNOWPARKDB \
-          -s SNOWPARKSCHEMA \
-          -f 02_insert_data/insert_customer.sql
+        snow sql -f 02_insert_data/insert_customer.sql --connection devconn
