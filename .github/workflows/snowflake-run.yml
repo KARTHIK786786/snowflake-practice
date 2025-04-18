@@ -5,26 +5,26 @@ on:
     branches: [main]
 
 jobs:
-  snowflake-job:
+  run-snowflake:
     runs-on: ubuntu-latest
 
     steps:
       - name: ✅ Checkout Code
         uses: actions/checkout@v3
 
-      - name: ✅ Install Snow CLI
+      - name: ✅ Install SnowSQL CLI via pip
         run: |
           pip install --upgrade pip
           pip install snowflake-cli-labs
 
-      - name: ✅ Run SQL using inline credentials
-        env:
-          SNOWFLAKE_ACCOUNT: pipbfcf-xr87735
-          SNOWFLAKE_USER: mithrakarthik2025
-          SNOWFLAKE_PASSWORD: Mithrakarthik2025NEW
-          SNOWFLAKE_ROLE: ACCOUNTADMIN
-          SNOWFLAKE_WAREHOUSE: COMPUTE_WH
-          SNOWFLAKE_DATABASE: SNOWPARKDB
-          SNOWFLAKE_SCHEMA: SNOWPARKSCHEMA
+      - name: ✅ Run SQL script using inline connection
         run: |
-          snow sql -f 02_insert_data/insert_customer.sql
+          snow sql \
+            --account-name pipbfcf-xr87735 \
+            --username mithrakarthik2025 \
+            --password Mithrakarthik2025NEW \
+            --role ACCOUNTADMIN \
+            --warehouse COMPUTE_WH \
+            --database SNOWPARKDB \
+            --schema SNOWPARKSCHEMA \
+            -f 02_insert_data/insert_customer.sql
