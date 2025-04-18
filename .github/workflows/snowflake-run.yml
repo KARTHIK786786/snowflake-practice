@@ -13,12 +13,13 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Install SnowSQL from CDN
+    - name: Install SnowSQL using ZIP
       run: |
-        curl -L 'https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/1.2/linux_x86_64/snowsql-linux_x86_64.tgz' -o snowsql.tgz
-        mkdir -p ~/snowsql
-        tar -xvzf snowsql.tgz -C ~/snowsql
-        ~/snowsql/snowsql-linux_x86_64/install --yes
+        sudo apt update
+        sudo apt install -y unzip
+        curl -O https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/1.2/linux_x86_64/snowsql-linux_x86_64.zip
+        unzip snowsql-linux_x86_64.zip
+        ./snowsql-linux_x86_64/install.sh
 
     - name: Run insert_customer.sql in Snowflake
       run: |
