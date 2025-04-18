@@ -21,7 +21,7 @@ jobs:
     - name: Configure Snowflake Connection
       run: |
         snow connection add --connection-name default \
-          --host ${{ secrets.SF_HOST }} \
+          --accountname ${{ secrets.SF_ACCOUNT }} \
           --username ${{ secrets.SF_USER }} \
           --password ${{ secrets.SF_PASSWORD }} \
           --role ${{ secrets.SF_ROLE }} \
