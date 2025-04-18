@@ -16,9 +16,9 @@ jobs:
     - name: Install SnowSQL
       run: |
         sudo apt update
-        sudo apt install -y unzip
-        curl -O https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/1.2/linux_x86_64/snowsql-linux_x86_64.zip
-        unzip snowsql-linux_x86_64.zip
+        sudo apt install -y wget tar
+        wget https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/1.2/linux_x86_64/snowsql-linux_x86_64.tar.gz
+        tar -xvzf snowsql-linux_x86_64.tar.gz
         ./snowsql-linux_x86_64/install.sh
 
     - name: Run insert_customer.sql in Snowflake
