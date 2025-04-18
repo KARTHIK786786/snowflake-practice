@@ -13,20 +13,20 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Install SnowSQL using pip
+    - name: Install Snowflake CLI via pip
       run: |
         python3 -m pip install --upgrade pip
         pip install snowflake-cli-labs
 
     - name: Run insert_customer.sql in Snowflake
       run: |
-        sfcli login connection save myconn \
+        snow connection add myconn \
           --account ${{ secrets.SF_ACCOUNT }} \
-          --username ${{ secrets.SF_USER }} \
+          --user ${{ secrets.SF_USER }} \
           --password ${{ secrets.SF_PASSWORD }} \
           --role ${{ secrets.SF_ROLE }} \
           --warehouse ${{ secrets.SF_WAREHOUSE }} \
           --database ${{ secrets.SF_DATABASE }} \
           --schema ${{ secrets.SF_SCHEMA }}
 
-        sfcli execute file -f 02_insert_data/insert_customer.sql --connection myconn
+        snow sql -f 02_insert_data/insert_customer.sql -c myconn
