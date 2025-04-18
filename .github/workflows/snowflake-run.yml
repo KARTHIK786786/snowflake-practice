@@ -1,4 +1,4 @@
-name: Run Snowflake Script with snowsql
+name: Run Snowflake Script using snowsql
 
 on:
   push:
@@ -13,20 +13,20 @@ jobs:
     - name: ✅ Checkout Code
       uses: actions/checkout@v3
 
-    - name: ✅ Install snowsql CLI (ignore non-critical exit)
+    - name: ✅ Install snowsql CLI from Snowflake CDN
       run: |
         curl -O https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/1.2/linux_x86_64/snowsql-1.2.21-linux_x86_64.bash
-        bash snowsql-1.2.21-linux_x86_64.bash -- -y -d $HOME/snowsql || true
+        bash snowsql-1.2.21-linux_x86_64.bash -- -y -d $HOME/snowsql
         echo "$HOME/snowsql/bin" >> $GITHUB_PATH
 
     - name: ✅ Run SQL Script using snowsql
+      env:
+        SNOWSQL_ACCOUNT: ${{ secrets.SF_ACCOUNT }}
+        SNOWSQL_USER: ${{ secrets.SF_USER }}
+        SNOWSQL_PWD: ${{ secrets.SF_PASSWORD }}
+        SNOWSQL_ROLE: ${{ secrets.SF_ROLE }}
+        SNOWSQL_WAREHOUSE: ${{ secrets.SF_WAREHOUSE }}
+        SNOWSQL_DATABASE: ${{ secrets.SF_DATABASE }}
+        SNOWSQL_SCHEMA: ${{ secrets.SF_SCHEMA }}
       run: |
-        snowsql \
-          -a ${{ secrets.SF_ACCOUNT }} \
-          -u ${{ secrets.SF_USER }} \
-          -p ${{ secrets.SF_PASSWORD }} \
-          -r ${{ secrets.SF_ROLE }} \
-          -w ${{ secrets.SF_WAREHOUSE }} \
-          -d ${{ secrets.SF_DATABASE }} \
-          -s ${{ secrets.SF_SCHEMA }} \
-          -f 02_insert_data/insert_customer.sql
+        snowsql -f 02_insert_data/insert_customer.sql
