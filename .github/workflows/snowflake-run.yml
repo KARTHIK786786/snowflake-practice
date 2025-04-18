@@ -9,15 +9,6 @@ jobs:
   run-snowflake:
     runs-on: ubuntu-latest
 
-    env:
-      SNOWFLAKE_ACCOUNT: ${{ secrets.SF_ACCOUNT }}
-      SNOWFLAKE_USER: ${{ secrets.SF_USER }}
-      SNOWFLAKE_PASSWORD: ${{ secrets.SF_PASSWORD }}
-      SNOWFLAKE_ROLE: ${{ secrets.SF_ROLE }}
-      SNOWFLAKE_WAREHOUSE: ${{ secrets.SF_WAREHOUSE }}
-      SNOWFLAKE_DATABASE: ${{ secrets.SF_DATABASE }}
-      SNOWFLAKE_SCHEMA: ${{ secrets.SF_SCHEMA }}
-
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
@@ -27,6 +18,14 @@ jobs:
         pip install --upgrade pip
         pip install snowflake-cli-labs
 
-    - name: Run SQL Script in Snowflake
+    - name: Run SQL Script using inline Snowflake credentials
       run: |
-        snow sql -f 02_insert_data/insert_customer.sql --connection '@env'
+        snow sql \
+          --account-name ${{ secrets.SF_ACCOUNT }} \
+          --username ${{ secrets.SF_USER }} \
+          --password ${{ secrets.SF_PASSWORD }} \
+          --role ${{ secrets.SF_ROLE }} \
+          --warehouse ${{ secrets.SF_WAREHOUSE }} \
+          --database ${{ secrets.SF_DATABASE }} \
+          --schema ${{ secrets.SF_SCHEMA }} \
+          -f 02_insert_data/insert_customer.sql
