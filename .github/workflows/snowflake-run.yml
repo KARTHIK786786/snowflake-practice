@@ -1,12 +1,11 @@
-name: Run Snowflake Script
+name: Run Snowflake SQL via Snow CLI
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
-  run-snowsql:
+  run-snowflake:
     runs-on: ubuntu-latest
 
     env:
@@ -19,14 +18,14 @@ jobs:
       SNOWFLAKE_SCHEMA: SNOWPARKSCHEMA
 
     steps:
-    - name: ✅ Checkout Code
-      uses: actions/checkout@v3
+      - name: ✅ Checkout Code
+        uses: actions/checkout@v3
 
-    - name: ✅ Install SnowSQL CLI via pip
-      run: |
-        python3 -m pip install --upgrade pip
-        pip install snowflake-cli-labs
+      - name: ✅ Install Snow CLI
+        run: |
+          pip install --upgrade pip
+          pip install snowflake-cli-labs
 
-    - name: ✅ Run SQL Script
-      run: |
-        snow sql -f 02_insert_data/insert_customer.sql
+      - name: ✅ Run SQL Script using Snow CLI
+        run: |
+          snow sql -f 02_insert_data/insert_customer.sql
